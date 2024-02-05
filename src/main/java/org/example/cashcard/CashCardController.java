@@ -21,7 +21,8 @@ class CashCardController {
     GET requests that match cashcards/{requestedID} will be handled by this method.
      */
     @GetMapping("/{requestedId}")
-    private ResponseEntity<String> findById() {
-        return ResponseEntity.ok("{}");
+    private ResponseEntity<CashCard> findById() {
+        CashCard cashCard = new CashCard(1000L, 0.0);
+        return ResponseEntity.ok(cashCard);
     }
 }
