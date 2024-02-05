@@ -1,5 +1,7 @@
 package org.example.cashcard;
 
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,5 +42,11 @@ class CashCardApplicationTests {
         including the HTTP Response Status code, which we expect to be 200 OK.
          */
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        //converts the response String into a JSON-aware object with lots of helper methods.
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+
+        Number id = documentContext.read("$.id");
+        assertThat(id).isNotNull();
     }
 }
