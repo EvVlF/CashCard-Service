@@ -16,6 +16,11 @@ This is a companion to @RestController that indicates which address requests mus
 @RestController
 @RequestMapping("/cashcards")
 class CashCardController {
+    private final CashCardRepository cashCardRepository;
+
+    private CashCardController(CashCardRepository cashCardRepository) {
+        this.cashCardRepository = cashCardRepository;
+    }
 
     /*
     @GetMapping marks a method as a handler method.
