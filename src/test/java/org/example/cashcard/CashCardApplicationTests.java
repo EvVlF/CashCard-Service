@@ -9,6 +9,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.net.URI;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -73,6 +75,25 @@ class CashCardApplicationTests {
         we don't expect a CashCard to be returned to us, so we expect a Void response body
          */
         ResponseEntity<Void> createResponse = restTemplate.postForEntity("/cashcards", newCashCard, Void.class);
-        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        /*
+        We now expect the HTTP response status code to be 201 CREATED,
+        which is semantically correct if our API creates a new CashCard from our request.
+         */
+        assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
+        /*
+        when a POST request results in the successful creation of a resource, such as a new CashCard,
+        the response should include information for how to retrieve that resource.
+        We'll do this by supplying a URI in a Response Header named "Location".
+        Note: URI is indeed the correct entity here and not a URL; a URL is a type of URI, while a URI is more generic.
+         */
+        URI locationOfNewCashCard = createResponse.getHeaders().getLocation();
+
+        /*
+        we'll use the Location header's information to fetch the newly created CashCard.
+         */
+        ResponseEntity<String> getResponse = restTemplate.getForEntity(locationOfNewCashCard, String.class);
+        assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }
