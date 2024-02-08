@@ -2,7 +2,9 @@ package org.example.cashcard;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 /*
@@ -38,8 +40,31 @@ class CashCardController {
         }
     }
 
+    /*
+    createCashCard(@RequestBody CashCard newCashCardRequest, ...)
+    the POST expects a request "body". This contains the data submitted to the API.
+    Spring Web will deserialize the data into a CashCard for us.
+     */
     @PostMapping
-    private ResponseEntity<Void> createCashCard() {
-        return null;
+    private ResponseEntity<Void> createCashCard(@RequestBody CashCard newCashCardRequest, UriComponentsBuilder ucb) {
+        /*
+        it saves a new CashCard for us, and returns the saved object with a unique id provided by the database
+         */
+        CashCard savedCashCard = cashCardRepository.save(newCashCardRequest);
+
+        /*
+        This is constructing a URI to the newly created CashCard.
+        This is the URI that the caller can then use to GET the newly-created CashCard.
+        Note: savedCashCard.id is used as the identifier,
+        which matches the GET endpoint's specification of cashcards/<CashCard.id>
+
+        We were able to add UriComponentsBuilder ucb as a method argument to this POST handler method and
+        it was automatically passed in with injected from Spring's IoC Container.
+         */
+        URI locationOfNewCashCard = ucb
+                .path("cashcards/{id}")
+                .buildAndExpand(savedCashCard.id())
+                .toUri();
+        return ResponseEntity.created(locationOfNewCashCard).build();
     }
 }
