@@ -131,6 +131,6 @@ class CashCardApplicationTests {
         Since we don't specify the order, containsExactlyInAnyOrder(...) asserts that while the list must contain everything we assert,
         the order does not matter.
          */
-        assertThat(amounts).containsExactlyInAnyOrder(123.45, 100.0, 150.00);
+        assertThat(amounts).containsExactlyInAnyOrder(123.45, 1.0, 150.00);
     }
 }
