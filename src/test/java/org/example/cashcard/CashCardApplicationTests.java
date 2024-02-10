@@ -2,6 +2,7 @@ package org.example.cashcard;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -104,9 +105,32 @@ class CashCardApplicationTests {
         assertThat(amount).isEqualTo(250.00);
     }
 
+    /*
+    To learn more about JsonPath, a good place to start is here in the JsonPath documentation
+    https://github.com/json-path/JsonPath
+     */
     @Test
     void shouldReturnAllCashCardsWhenListIsRequested() {
         ResponseEntity<String> response = restTemplate.getForEntity("/cashcards", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        //documentContext.read("$.length()") calculates the length of the array.
+        int cashCardCount = documentContext.read("$.length()");
+        assertThat(cashCardCount).isEqualTo(3);
+
+        //.read("$..id") retrieves the list of all id values returned
+        JSONArray ids = documentContext.read("$..id");
+        assertThat(ids).containsExactlyInAnyOrder(99, 100, 101);
+
+        //.read("$..amount") collects all amounts returned
+        JSONArray amounts = documentContext.read("$..amount");
+
+        /*
+        We haven't guaranteed the order of the CashCard list -- they come out in whatever order the database chooses to return them
+        Since we don't specify the order, containsExactlyInAnyOrder(...) asserts that while the list must contain everything we assert,
+        the order does not matter.
+         */
+        assertThat(amounts).containsExactlyInAnyOrder(123.45, 100.0, 150.00);
     }
 }
