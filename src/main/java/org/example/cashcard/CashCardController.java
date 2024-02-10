@@ -67,4 +67,13 @@ class CashCardController {
                 .toUri();
         return ResponseEntity.created(locationOfNewCashCard).build();
     }
+
+    /*
+    Repository, CashCardRepository, will automatically return all CashCard records
+    from the database when findAll() is invoked
+     */
+    @GetMapping()
+    private ResponseEntity<Iterable<CashCard>> findAll() {
+        return ResponseEntity.ok(cashCardRepository.findAll());
+    }
 }
