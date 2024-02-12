@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.net.URI;
 
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 This will start our Spring Boot application and make it available for our test to perform requests to it.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 class CashCardApplicationTests {
 
     /*
@@ -64,7 +66,11 @@ class CashCardApplicationTests {
         assertThat(response.getBody()).isBlank();
     }
 
+    /*
+    @DirtiesContext fixes this problem by causing Spring to start with a clean slate, as if those other tests hadn't been run
+     */
     @Test
+    @DirtiesContext
     void shouldCreateANewCashCard() {
         /*
         The database will create and manage all unique CashCard.id values for us. We shouldn't provide one.
