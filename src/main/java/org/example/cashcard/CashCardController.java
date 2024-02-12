@@ -78,11 +78,6 @@ class CashCardController {
     Repository, CashCardRepository, will automatically return all CashCard records
     from the database when findAll() is invoked
      */
-    @GetMapping()
-    private ResponseEntity<Iterable<CashCard>> findAll() {
-        return ResponseEntity.ok(cashCardRepository.findAll());
-    }
-
     @GetMapping
     /*
     findAll(Pageable pageable): Pageable is yet another object that Spring Web provides for us.
