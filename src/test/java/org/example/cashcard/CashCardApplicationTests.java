@@ -149,4 +149,25 @@ class CashCardApplicationTests {
         JSONArray page = documentContext.read("$[*]");
         assertThat(page.size()).isEqualTo(1);
     }
+
+    /*
+    The URI we're requesting contains both pagination and sorting information:
+    /cashcards?page=0&size=1&sort=amount,desc
+
+    page=0: Get the first page. Page indexes start at 0.
+    size=1: Each page has size 1.
+    sort=amount,desc
+     */
+    @Test
+    void shouldReturnASortedPageOfCashCards() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/cashcards?page=0&size=1&sort=amount,desc", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        JSONArray read = documentContext.read("$[*]");
+        assertThat(read.size()).isEqualTo(1);
+
+        double amount = documentContext.read("$[0].amount");
+        assertThat(amount).isEqualTo(150.00);
+    }
 }
