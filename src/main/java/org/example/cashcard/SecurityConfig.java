@@ -33,7 +33,7 @@ public class SecurityConfig {
                         HTTP Basic Authentication security (username and password).
                          */
                         .requestMatchers("/cashcards/**")
-                        .authenticated())
+                        .hasRole("CARD-OWNER")) // enable RBAC
                 .httpBasic(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable());
         return http.build();
