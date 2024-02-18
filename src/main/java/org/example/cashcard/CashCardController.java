@@ -89,8 +89,8 @@ class CashCardController {
     PageRequest is a basic Java Bean implementation of Pageable.
     Things that want paging and sorting implementation often support this, such as some types of Spring Data Repositories.
      */
-    private ResponseEntity<List<CashCard>> findAll(Pageable pageable) {
-        Page<CashCard> page = cashCardRepository.findAll(
+    private ResponseEntity<List<CashCard>> findAll(Pageable pageable, Principal principal) {
+        Page<CashCard> page = cashCardRepository.findByOwner(principal.getName(),
                 PageRequest.of(
                         pageable.getPageNumber(),
                         pageable.getPageSize(),
