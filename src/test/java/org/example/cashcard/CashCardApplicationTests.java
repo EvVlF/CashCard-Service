@@ -78,7 +78,7 @@ class CashCardApplicationTests {
         /*
         The database will create and manage all unique CashCard.id values for us. We shouldn't provide one.
          */
-        CashCard newCashCard = new CashCard(null, 250.00, "sarah1");
+        CashCard newCashCard = new CashCard(null, 250.00, null);
 
         /*
         provide newCashCard data for the new CashCard.
