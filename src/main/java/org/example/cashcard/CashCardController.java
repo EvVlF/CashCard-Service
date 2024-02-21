@@ -107,7 +107,7 @@ class CashCardController {
         /*scope retrieval of the CashCard to the submitted requestedId and Principal (provided by Spring Security)
         to ensure only the authenticated, authorized owner may update this CashCard
          */
-        CashCard cashCard = cashCardRepository.findByIdAndOwner(requestedId, principal.getName());
+        CashCard cashCard = findCashCard(requestedId, principal);
         if (cashCard != null) {
             //build a CashCard with updated values and save it
             CashCard updatedCashCard = new CashCard(cashCard.id(), cashCardUpdate.amount(), principal.getName());
