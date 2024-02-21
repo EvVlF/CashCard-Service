@@ -116,4 +116,8 @@ class CashCardController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    private CashCard findCashCard(Long requestedId, Principal principal) {
+        return cashCardRepository.findByIdAndOwner(requestedId, principal.getName());
+    }
 }
